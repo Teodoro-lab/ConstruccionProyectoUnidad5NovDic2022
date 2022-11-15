@@ -13,5 +13,5 @@
 
 ## Integrantes
 
-* Jorge Teodoro Dawn Rodriguez 👦🏻
+* Jorge Teodoro Dawn Rodríguez 👦🏻
 * Verónica Marilyn Rivera Manzanero 👧🏽

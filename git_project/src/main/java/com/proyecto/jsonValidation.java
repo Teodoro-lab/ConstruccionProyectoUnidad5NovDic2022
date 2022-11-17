@@ -8,7 +8,7 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class jsonValidation {
+public class JsonValidation {
 
     private static void validateJSONEmployeeData(JSONObject employeeObject) {
         if (

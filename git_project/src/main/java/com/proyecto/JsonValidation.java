@@ -10,17 +10,28 @@ import java.io.IOException;
 
 public class JsonValidation {
 
+    /* 
+     *   Checks that each employee JSONObject contains the required fields:
+     *  - firstName
+     *  - lastName
+     *  - photo
+     *  - id
+     * 
+     * OtherWise throws IllegalArgumentException
+     */
     private static void validateJSONEmployeeData(JSONObject employeeObject) {
-        if (
-            !employeeObject.containsKey("id") ||
-            !employeeObject.containsKey("firstName") ||
-            !employeeObject.containsKey("lastName") ||
-            !employeeObject.containsKey("Photo")) 
-        {
+        if (!employeeObject.containsKey("id") ||
+                !employeeObject.containsKey("firstName") ||
+                !employeeObject.containsKey("lastName") ||
+                !employeeObject.containsKey("photo")) {
             throw new IllegalArgumentException("An employee object is missing a required field");
         }
     }
 
+    /*
+     * Checks that the JSON file contains a list of employees,
+     * which each of them is validated by validateJSONEmployeeData
+     */
     private static void validateCorrectJsonData(JSONObject json) {
         JSONArray employees;
 
@@ -37,14 +48,18 @@ public class JsonValidation {
         }
     }
 
+    
     public static String readJson() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         FileReader reader = new FileReader("src/employees.json");
-
         Object objectToRead = parser.parse(reader);
         JSONObject json = (JSONObject) objectToRead;
         validateCorrectJsonData(json);
 
         return json.toJSONString();
+    }
+
+    public static void main(String[] args) throws IOException, ParseException {
+        System.out.println(JsonValidation.readJson());
     }
 }

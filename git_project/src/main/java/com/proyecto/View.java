@@ -4,12 +4,12 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class view {
+public class View {
 
     JFrame f;
     JTable j;
 
-    view() {
+    View() {
 
         f = new JFrame();
 
@@ -33,6 +33,6 @@ public class view {
     }
 
     public static void main(String[] args) {
-        new view();
+        new View();
     }
 }

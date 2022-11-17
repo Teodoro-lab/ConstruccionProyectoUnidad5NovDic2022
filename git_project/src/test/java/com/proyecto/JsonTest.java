@@ -14,7 +14,7 @@ public class JsonTest {
 
     @Test
     @DisplayName("Validate the existence of the employees JSON file")
-    public void JSONexistence() {
+    public void JSONNotExistence_ThrowFileNotFoundException() {
         assertThrows(FileNotFoundException.class, () -> {
             try {
                 JsonValidation.readJson();
@@ -26,19 +26,19 @@ public class JsonTest {
 
     @Test
     @DisplayName("Validate function throws ParseException when JSON file contains invalid data")
-    public void validateCorrectJsonData() {
-       assertThrows( ParseException.class, () -> {
-           try {
-               JsonValidation.readJson();
-           } catch (IllegalArgumentException | IOException e) {
-               assumeNoException(e);
-           }
-       });
+    public void NotValidJSON_ThrowParseException() {
+        assertThrows(ParseException.class, () -> {
+            try {
+                JsonValidation.readJson();
+            } catch (IllegalArgumentException | IOException e) {
+                assumeNoException(e);
+            }
+        });
     }
 
     @Test
     @DisplayName("Validate function throws IllegalArgumentException when JSON file is missing a required key")
-    public void JSONSchemaValidator() {
+    public void JSONSchemaValidator_ThrowIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             try {
                 JsonValidation.readJson();
@@ -48,4 +48,23 @@ public class JsonTest {
         });
     }
 
+    @Test
+    @DisplayName("Validate that the that the json output string is correct")
+    public void validateOutputString() {
+
+        String expetedString = "{\"employees\":[" +
+                "{\"firstName\":\"Tom\",\"lastName\":\"Cruise\",\"photo\":\"https:\\/\\/jsonformatter.org\\/img\\/tom-cruise.jpg\",\"id\":\"1\"},"
+                +
+                "{\"firstName\":\"Maria\",\"lastName\":\"Sharapova\",\"photo\":\"https:\\/\\/jsonformatter.org\\/img\\/Maria-Sharapova.jpg\",\"id\":\"2\"},"
+                +
+                "{\"firstName\":\"Robert\",\"lastName\":\"Downey Jr.\",\"photo\":\"https:\\/\\/jsonformatter.org\\/img\\/Robert-Downey-Jr.jpg\",\"id\":\"3\"}"
+                +
+                "]}";
+
+        try {
+            assertEquals(expetedString, JsonValidation.readJson());
+        } catch (ParseException | IllegalArgumentException | IOException e) {
+            assumeNoException(e);
+        }
+    }
 }

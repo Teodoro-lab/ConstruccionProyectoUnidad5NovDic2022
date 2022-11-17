@@ -1,5 +1,6 @@
 package com.proyecto;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -9,18 +10,41 @@ import java.io.IOException;
 
 public class jsonValidation {
 
-    public static String readJson() {
-        Object objectToRead;
-
+    private static void validateJSONEmployeeData(JSONObject employeeObject) {
+        if (
+            !employeeObject.containsKey("id") ||
+            !employeeObject.containsKey("firstName") ||
+            !employeeObject.containsKey("lastName") ||
+            !employeeObject.containsKey("Photo")) 
         {
-            try {
-                objectToRead = new JSONParser().parse(new FileReader("src/employees.json"));
-            } catch (IOException | ParseException e) {
-                throw new RuntimeException(e);
+            throw new IllegalArgumentException("An employee object is missing a required field");
+        }
+    }
+
+    private static void validateCorrectJsonData(JSONObject json) {
+        JSONArray employees;
+
+        if (json.containsKey("employees")) {
+            employees = (JSONArray) json.get("employees");
+
+            for (Object employee : employees) {
+                JSONObject employeeObject = (JSONObject) employee;
+                validateJSONEmployeeData(employeeObject);
+            }
+
+        } else {
+            throw new IllegalArgumentException("Json file is missing the employees key");
             }
         }
 
-        JSONObject jsonA = (JSONObject) objectToRead;
-        return jsonA.toString();
+    public static String readJson() throws IOException, ParseException {
+        JSONParser parser = new JSONParser();
+        FileReader reader = new FileReader("src/employees.json");
+
+        Object objectToRead = parser.parse(reader);
+        JSONObject json = (JSONObject) objectToRead;
+        validateCorrectJsonData(json);
+
+        return json.toJSONString();
     }
 }

@@ -34,8 +34,8 @@ public class JsonValidation {
 
         } else {
             throw new IllegalArgumentException("Json file is missing the employees key");
-            }
         }
+    }
 
     public static String readJson() throws IOException, ParseException {
         JSONParser parser = new JSONParser();

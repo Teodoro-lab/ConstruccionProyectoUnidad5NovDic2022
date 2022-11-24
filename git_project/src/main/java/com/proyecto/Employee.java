@@ -47,6 +47,13 @@ public class Employee{
         this.photo = photo;
     }
 
+    public Object[] getEmployeeAsArray() {
+        return new Object[] { this.id, this.firstName, this.lastName, this.photo };
+    }
 
+    @Override
+    public String toString() {
+        return "id: " + id + ", firstName: " + firstName + ", lastName: " + lastName;
+    }
 
 }

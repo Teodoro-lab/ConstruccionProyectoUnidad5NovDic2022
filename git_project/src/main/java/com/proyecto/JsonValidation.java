@@ -51,13 +51,15 @@ public class JsonValidation {
     
     public static String readJson() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
-        FileReader reader = new FileReader("src/employees.json");
-        Object objectToRead = parser.parse(reader);
-        JSONObject json = (JSONObject) objectToRead;
+        FileReader jsonFile = new FileReader("src/employees.json");
+        Object employeesData = parser.parse(jsonFile);
+        JSONObject json = (JSONObject) employeesData;
         validateCorrectJsonData(json);
 
         return json.toJSONString();
     }
+
+
 
     public static void main(String[] args) throws IOException, ParseException {
         System.out.println(JsonValidation.readJson());

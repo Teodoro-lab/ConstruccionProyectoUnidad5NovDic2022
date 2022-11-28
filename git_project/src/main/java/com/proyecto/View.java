@@ -23,7 +23,7 @@ public class View {
 
         f.setTitle("IU FOR DUMMIES");
 
-        JsonReader rj = new JsonReader();
+        JsonManager rj = new JsonManager();
         Employee[] info = rj.convertJsonToList();
 
         Object[][] data = getEmployeeData(info);

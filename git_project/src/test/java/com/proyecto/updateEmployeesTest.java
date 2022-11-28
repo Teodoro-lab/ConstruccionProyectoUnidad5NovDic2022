@@ -1,22 +1,32 @@
 package com.proyecto;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 
 public class updateEmployeesTest {
 
     @Test
-    @DisplayName("successfully update at employees data")
-    public void shouldUpdateEmployeeData() {
-        JsonManager jsonManager = new JsonManager();
-        Employee[] info = jsonManager.convertJsonToList();
-        Assertions.assertNotEquals(info, jsonManager.convertJsonToList());
+    public void updateEmployees() {
+        boolean exists = false;
+
+        Employee newEmployee = new Employee("3", "Bruice", "Lee", "https://jsonformatter.org/img/tom-cruise.jpg");
+
+        JsonManager manager = new JsonManager();
+        for (Employee employee : manager.convertJsonToList()) {
+            if (employee.getId().equals(newEmployee.getId())) {
+                exists = true;
+                break;
+            }
+        }
+
+        assertTrue(exists);
+        assertFalse(newEmployee.getFirstName().isBlank());
+        assertFalse(newEmployee.getLastName().isBlank());
+        assertFalse(newEmployee.getPhoto().isBlank());
+        manager.updateEmployeeInJson(newEmployee);
+
     }
 
 }

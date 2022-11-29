@@ -4,6 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -11,26 +15,26 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+import java.util.Arrays;
+import java.util.List;
 import com.proyecto.Employee;
 import com.proyecto.JsonManager;
+import com.proyecto.view.DeleteButton.ButtonEditor;
+import com.proyecto.view.DeleteButton.ButtonRenderer;
 
 public class EmployeeTableManager {
     private JTable table;
-    String[] columnNames = { "id", "firstName", "lastName", "photo" };
+    String[] columnNames = { "id", "firstName", "lastName", "photo", "delete" };
     JsonManager jsonManager = new JsonManager();
-    Employee[] info;
-    
+    List<Employee> info;
 
-    public EmployeeTableManager(Employee[] info) {
-        this.info = info;
+    public EmployeeTableManager(Employee[] infoEmployee) {
+        this.info = Arrays.asList(infoEmployee);
 
-        Object[][] data = getEmployeeData(info);
+        Object[][] data = getEmployeeData(infoEmployee);
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-            // Returning the Class of each column will allow different
-            // renderers to be used based on Class
             @Override
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
@@ -38,6 +42,11 @@ public class EmployeeTableManager {
         };
 
         this.table = new JTable(model);
+
+        DeleteButton dbutton = new DeleteButton(table);
+
+        table.getColumn("delete").setCellRenderer((TableCellRenderer) new ButtonRenderer());
+        table.getColumn("delete").setCellEditor((TableCellEditor) new ButtonEditor(new JCheckBox()));
 
         Action action = new AbstractAction() {
             @Override
@@ -50,6 +59,7 @@ public class EmployeeTableManager {
 
                 String value = tcl.getNewValue().toString();
                 updateEmployee(tcl.getRow(), tcl.getColumn(), value);
+
             }
         };
 
@@ -61,7 +71,7 @@ public class EmployeeTableManager {
     }
 
     private void updateEmployee(int row, int col, String value) {
-        Employee employee = info[row];
+        Employee employee = info.get(row);
 
         switch (col) {
             case 0:
@@ -97,10 +107,12 @@ public class EmployeeTableManager {
 
     private Object[][] getEmployeeData(Employee[] employees) {
         Object[][] employeesData = new Object[employees.length][];
-        for (int i = 0; i < employees.length; i++) {
+
+        for (int i = 0; i < info.size(); i++) {
             employeesData[i] = employees[i].getEmployeeAsArray();
             employeesData[i][3] = getImgIcon((String) employeesData[i][3]);
         }
+
         return employeesData;
     }
 }

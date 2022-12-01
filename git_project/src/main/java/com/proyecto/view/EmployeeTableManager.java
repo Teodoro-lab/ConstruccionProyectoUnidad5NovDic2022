@@ -3,6 +3,7 @@ package com.proyecto.view;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
 
@@ -51,7 +52,16 @@ public class EmployeeTableManager {
                 // check for selected row first
                 if (table.getSelectedRow() != -1) {
                     // remove selected row from the model
+                    
+                    int col = 0;
+                    int row = table.getSelectedRow();
+                    
+                    String employeeId = (String)table.getValueAt(row, col);
+                    System.out.println(employeeId);
+
                     model.removeRow(table.getSelectedRow());
+
+                    jsonManager.deleteEmployeeFromJson(employeeId);
                     JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
                 }
             }

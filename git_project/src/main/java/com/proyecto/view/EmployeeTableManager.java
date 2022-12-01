@@ -1,40 +1,39 @@
 package com.proyecto.view;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
-import java.util.Arrays;
-import java.util.List;
 import com.proyecto.Employee;
 import com.proyecto.JsonManager;
-import com.proyecto.view.DeleteButton.ButtonEditor;
-import com.proyecto.view.DeleteButton.ButtonRenderer;
 
 public class EmployeeTableManager {
     private JTable table;
-    String[] columnNames = { "id", "firstName", "lastName", "photo", "delete" };
+    String[] columnNames = { "id", "firstName", "lastName", "photo" };
     JsonManager jsonManager = new JsonManager();
-    List<Employee> info;
+    Employee[] info;
+    JButton button;
 
-    public EmployeeTableManager(Employee[] infoEmployee) {
-        this.info = Arrays.asList(infoEmployee);
+    public EmployeeTableManager(Employee[] info) {
+        this.info = info;
 
-        Object[][] data = getEmployeeData(infoEmployee);
+        Object[][] data = getEmployeeData(info);
 
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            // Returning the Class of each column will allow different
+            // renderers to be used based on Class
             @Override
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
@@ -43,10 +42,20 @@ public class EmployeeTableManager {
 
         this.table = new JTable(model);
 
-        DeleteButton dbutton = new DeleteButton(table);
+        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        button = new JButton("Remove");
 
-        table.getColumn("delete").setCellRenderer((TableCellRenderer) new ButtonRenderer());
-        table.getColumn("delete").setCellEditor((TableCellEditor) new ButtonEditor(new JCheckBox()));
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                // check for selected row first
+                if (table.getSelectedRow() != -1) {
+                    // remove selected row from the model
+                    model.removeRow(table.getSelectedRow());
+                    JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
+                }
+            }
+        });
 
         Action action = new AbstractAction() {
             @Override
@@ -59,7 +68,6 @@ public class EmployeeTableManager {
 
                 String value = tcl.getNewValue().toString();
                 updateEmployee(tcl.getRow(), tcl.getColumn(), value);
-
             }
         };
 
@@ -71,7 +79,7 @@ public class EmployeeTableManager {
     }
 
     private void updateEmployee(int row, int col, String value) {
-        Employee employee = info.get(row);
+        Employee employee = info[row];
 
         switch (col) {
             case 0:
@@ -107,12 +115,14 @@ public class EmployeeTableManager {
 
     private Object[][] getEmployeeData(Employee[] employees) {
         Object[][] employeesData = new Object[employees.length][];
-
-        for (int i = 0; i < info.size(); i++) {
+        for (int i = 0; i < employees.length; i++) {
             employeesData[i] = employees[i].getEmployeeAsArray();
             employeesData[i][3] = getImgIcon((String) employeesData[i][3]);
         }
-
         return employeesData;
+    }
+
+    public JButton getButton() {
+        return button;
     }
 }

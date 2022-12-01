@@ -1,6 +1,7 @@
 package com.proyecto.view;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +11,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -21,7 +24,7 @@ public class EmployeeTableManager {
     String[] columnNames = { "id", "firstName", "lastName", "photo" };
     JsonManager jsonManager = new JsonManager();
     Employee[] info;
-    
+    JButton button;
 
     public EmployeeTableManager(Employee[] info) {
         this.info = info;
@@ -38,6 +41,21 @@ public class EmployeeTableManager {
         };
 
         this.table = new JTable(model);
+
+        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        button = new JButton("Remove");
+
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                // check for selected row first
+                if (table.getSelectedRow() != -1) {
+                    // remove selected row from the model
+                    model.removeRow(table.getSelectedRow());
+                    JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
+                }
+            }
+        });
 
         Action action = new AbstractAction() {
             @Override
@@ -102,5 +120,9 @@ public class EmployeeTableManager {
             employeesData[i][3] = getImgIcon((String) employeesData[i][3]);
         }
         return employeesData;
+    }
+
+    public JButton getButton() {
+        return button;
     }
 }

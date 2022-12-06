@@ -10,7 +10,6 @@ import com.proyecto.JsonManager;
 import java.awt.BorderLayout;
 
 public class View {
-
     JFrame f;
     JsonManager jsonManager = new JsonManager();
     Employee[] info = jsonManager.convertJsonToList();
@@ -34,5 +33,4 @@ public class View {
         f.setSize(900, 700);
         f.setVisible(true);
     }
-
 }

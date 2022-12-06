@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 
 public class JsonManager {
 
-    private String fileName = "src/employees.json";
+    private String fileName = "/home/teo/Desktop/workspace/ConstruccionProyectoUnidad5NovDic2022/git_project/src/employees.json";
 
     private void updateEmployeeFrom(Employee e, JSONArray employees) {
         for (int i = 0; i < employees.size(); i++) {
@@ -41,7 +41,6 @@ public class JsonManager {
 
             jsonObject.put("employees", employees);
 
-
             FileWriter file = new FileWriter(this.fileName);
             file.write(jsonObject.toJSONString());
             file.flush();
@@ -49,7 +48,6 @@ public class JsonManager {
         } catch (IOException | ParseException e1) {
             e1.printStackTrace();
         }
-
     }
 
     public void updateEmployeeInJson(Employee e) {
@@ -94,7 +92,7 @@ public class JsonManager {
 
         try {
             JSONParser parser = new JSONParser();
-            FileReader reader = new FileReader("src/employees.json");
+            FileReader reader = new FileReader(fileName);
             JSONObject jsonObject = (JSONObject) parser.parse(reader);
             return getEmployeeList(jsonObject);
 

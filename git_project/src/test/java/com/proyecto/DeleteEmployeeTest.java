@@ -10,7 +10,7 @@ public class DeleteEmployeeTest {
         boolean exists = true;
 
         JsonManager manager = new JsonManager();
-        Employee employeeToDelete =  manager.convertJsonToList()[0];
+        Employee employeeToDelete = manager.convertJsonToList()[0];
 
         manager.deleteEmployeeFromJson(employeeToDelete.getId());
         exists = false;

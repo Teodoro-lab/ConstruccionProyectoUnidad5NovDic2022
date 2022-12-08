@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 
 public class JsonManager {
 
-    private String fileName = "/home/teo/Desktop/workspace/ConstruccionProyectoUnidad5NovDic2022/git_project/src/employees.json";
+    private String fileName = "src/employees.json";
 
     private void updateEmployeeFrom(Employee e, JSONArray employees) {
         for (int i = 0; i < employees.size(); i++) {
@@ -32,12 +32,37 @@ public class JsonManager {
             JSONArray employees = (JSONArray) jsonObject.get("employees");
 
             for (int i = 0; i < employees.size(); i++) {
-                JSONObject employeeObj = (JSONObject)employees.get(i);
-                if (employeeObj.get("id").equals(id)){
+                JSONObject employeeObj = (JSONObject) employees.get(i);
+                if (employeeObj.get("id").equals(id)) {
                     employees.remove(i);
                     break;
                 }
             }
+
+            jsonObject.put("employees", employees);
+
+            FileWriter file = new FileWriter(this.fileName);
+            file.write(jsonObject.toJSONString());
+            file.flush();
+            file.close();
+        } catch (IOException | ParseException e1) {
+            e1.printStackTrace();
+        }
+
+    }
+
+    public void AddEmployeeFromJson(Employee e) {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(this.fileName));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray employees = (JSONArray) jsonObject.get("employees");
+            JSONObject employee = new JSONObject();
+            employee.put("id", e.getId());
+            employee.put("firstName", e.getFirstName());
+            employee.put("lastName", e.getLastName());
+            employee.put("photo", e.getPhoto());
+            employees.add(employee);
 
             jsonObject.put("employees", employees);
 
@@ -56,6 +81,7 @@ public class JsonManager {
             Object obj = parser.parse(new FileReader(this.fileName));
             JSONObject jsonObject = (JSONObject) obj;
             JSONArray employees = (JSONArray) jsonObject.get("employees");
+
             jsonObject.put("employees", employees);
 
             updateEmployeeFrom(e, employees);

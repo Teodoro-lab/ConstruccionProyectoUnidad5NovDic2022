@@ -4,14 +4,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.beans.*;
 
-/*
- *  This class listens for changes made to the data in the table via the
- *  TableCellEditor. When editing is started, the value of the cell is saved
- *  When editing is stopped the new value is saved. When the oold and new
- *  values are different, then the provided Action is invoked.
- *
- *  The source of the Action is a TableCellListener instance.
- */
 public class TableCellListener implements PropertyChangeListener, Runnable {
     private JTable table;
     private Action action;
